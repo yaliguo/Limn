@@ -24,15 +24,17 @@ public class NetManager extends ManagerBase{
                 .map(new Func1<ResponseBody, NetResponse<ResponseBody>>() {
                     @Override
                     public NetResponse<ResponseBody> call(ResponseBody responseBody) {
-                        return new NetResponse<>(NetResponse.Type.ON_NEXT, responseBody, null);
-
+                        return NetResponse.onNext(responseBody);
                     }
-                }).subscribe(result);
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        result.onNext(NetResponse.fetchingError(throwable));
+                    }
+                })
+                .subscribe(result);
        return create();
-    }
-
-    private void doError(Throwable throwable) {
-
     }
     public Observable<NetResponse<ResponseBody>> create(){
         return  result.asObservable();

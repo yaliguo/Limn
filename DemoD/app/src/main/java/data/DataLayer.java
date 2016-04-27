@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import base.BaseDataLayer;
 import okhttp3.ResponseBody;
+import phoenix.pe.demod.HomeActivity;
 import pojo.PmInfo;
 import pojo.WeatherInfo;
 import rx.Observable;
@@ -36,15 +37,40 @@ public class DataLayer extends BaseDataLayer {
     @NonNull
     public Observable<WeatherInfo> getWehther(){
     mNetManager.getWeather()
-            .map(responseBodyNetResponse -> {
-                String s = "";
-                try {
-                    s =responseBodyNetResponse.getValue().string();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            .filter(new Func1<NetResponse<ResponseBody>, Boolean>() {
+                @Override
+                public Boolean call(NetResponse<ResponseBody> responseBodyNetResponse) {
+                    return responseBodyNetResponse.isOnNext();
                 }
-                return ConvertData(s);
-            }).subscribe(store::put);
+            })
+            .map(new Func1<NetResponse<ResponseBody>, WeatherInfo>() {
+                @Override
+                public WeatherInfo call(NetResponse<ResponseBody> responseBodyNetResponse) {
+                    String s = "";
+                    try {
+                        s = responseBodyNetResponse.getValue().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return DataLayer.this.ConvertData(s);
+                }
+            })
+            .filter(new Func1<WeatherInfo, Boolean>() {
+                @Override
+                public Boolean call(WeatherInfo info) {
+                    if(info.result==null&&info.reason!=null){
+                        Log.e("ERROR",info.reason);
+                        return false;
+                    }
+                    return true;
+                }
+            })
+            .subscribe(new Action1<WeatherInfo>() {
+                @Override
+                public void call(WeatherInfo item) {
+                    store.put(item);
+                }
+            });
         return  store.query();
     }
 

@@ -33,8 +33,8 @@ public class NetResponse<T> {
     }
 
     @NonNull
-    public static<T> NetResponse<T> fetchingError() {
-        return new NetResponse<>(Type.FETCHING_ERROR, null, null);
+    public static<T> NetResponse<T> fetchingError(Throwable throwable) {
+        return new NetResponse<>(Type.FETCHING_ERROR, null, throwable);
     }
 
     public boolean isFetchingStart() {

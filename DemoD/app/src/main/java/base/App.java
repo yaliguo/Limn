@@ -10,7 +10,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.litesuits.orm.LiteOrm;
 
 import ioc.IocComponent;
-import phoenix.pe.demod.BuildConfig;
 
 /**
  * Created by pe on 2015/12/15.
@@ -33,7 +32,7 @@ public class App extends Application {
         if(null==mOrmInstance){
             mOrmInstance=LiteOrm.newCascadeInstance(mContext,DB_NAME);
         }
-        if(BuildConfig.DEBUG){
+        if(Config.DE_BUG){
             mOrmInstance.setDebugged(true);
         }
         mCompoent = IocComponent.Initializer.init(this);

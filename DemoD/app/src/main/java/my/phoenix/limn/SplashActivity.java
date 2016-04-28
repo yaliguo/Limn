@@ -1,4 +1,4 @@
-package phoenix.pe.demod;
+package my.phoenix.limn;
 
 import android.content.Intent;
 import android.view.SurfaceView;

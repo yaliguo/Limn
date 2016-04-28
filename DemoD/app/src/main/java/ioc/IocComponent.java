@@ -5,7 +5,7 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import phoenix.pe.demod.HomeActivity;
+import my.phoenix.limn.HomeActivity;
 import vm.HomeModel;
 
 /**

@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "phoenix.pe.demod"
+        applicationId "my.phoenix.limn"
         minSdkVersion 15
         targetSdkVersion 20
         versionCode 1

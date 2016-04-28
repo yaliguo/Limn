@@ -1,13 +1,10 @@
-package phoenix.pe.demod;
+package my.phoenix.limn;
 
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -15,38 +12,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-import javax.security.auth.Subject;
 
 import base.App;
 import base.BaseActivity;
 import base.BaseBinder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import ioc.IocComponent;
-import okhttp3.ResponseBody;
-import phoenix.pe.demod.adapter.WeatherWeekAdapter;
-import pojo.PmInfo;
+import my.phoenix.limn.adapter.WeatherWeekAdapter;
 import pojo.WeatherInfo;
 import pojo.WeatherItem;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 import utils.DataUtils;
 import utils.SystemUtils;

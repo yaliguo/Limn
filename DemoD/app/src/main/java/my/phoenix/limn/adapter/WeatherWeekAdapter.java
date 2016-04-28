@@ -1,4 +1,4 @@
-package phoenix.pe.demod.adapter;
+package my.phoenix.limn.adapter;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import java.util.List;
 
 import base.PDefautAdapter;
 import base.PViewHolder;
-import phoenix.pe.demod.R;
+import my.phoenix.limn.R;
 import pojo.WeatherItem;
 
 /**

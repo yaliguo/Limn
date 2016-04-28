@@ -9,20 +9,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import base.BaseDataLayer;
 import okhttp3.ResponseBody;
-import phoenix.pe.demod.HomeActivity;
 import pojo.PmInfo;
 import pojo.WeatherInfo;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import service.NetManager;
 import service.NetResponse;
-import service.build.RetroControl;
 import store.WeatherStore;
 
 /**

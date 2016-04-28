@@ -1,6 +1,5 @@
-package phoenix.pe.demod;
+package my.phoenix.limn;
 
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,21 +9,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.litesuits.orm.db.assit.QueryBuilder;
-import com.litesuits.orm.db.model.ConflictAlgorithm;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import base.App;
 import base.BaseActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import effect.BoomZoo;
-import effect.DownSplashParticleFactory;
-import phoenix.pe.demod.adapter.HomeRecAdapter;
+import my.phoenix.limn.adapter.HomeRecAdapter;
 import pojo.WeatherInfo;
 import rx.Observable;
 import rx.Subscriber;

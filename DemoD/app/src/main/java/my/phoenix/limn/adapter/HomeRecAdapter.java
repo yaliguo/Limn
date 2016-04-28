@@ -1,17 +1,14 @@
-package phoenix.pe.demod.adapter;
+package my.phoenix.limn.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
 
-import base.BaseRecAdapter;
 import base.PAdapterSupportType;
 import base.PDefautAdapter;
 import base.PViewHolder;
-import phoenix.pe.demod.R;
+import my.phoenix.limn.R;
 import pojo.WeatherInfo;
 
 /**

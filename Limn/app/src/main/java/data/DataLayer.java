@@ -35,7 +35,7 @@ public class DataLayer extends BaseDataLayer {
             .filter(new Func1<NetResponse<ResponseBody>, Boolean>() {
                 @Override
                 public Boolean call(NetResponse<ResponseBody> responseBodyNetResponse) {
-                    return responseBodyNetResponse.isOnNext();
+                    return false;
                 }
             })
             .map(new Func1<NetResponse<ResponseBody>, WeatherInfo>() {

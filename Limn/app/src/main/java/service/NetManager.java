@@ -19,6 +19,7 @@ public class NetManager extends ManagerBase{
 
     public Observable<NetResponse<ResponseBody>> getWeather(){
         RetroControl.getSimAPi()
+                //.getWeather("101010100","index_v", DataUtils.getDate(), Config.WEATHER_APPID2,DataUtils.createWeatherKey("101010100"))
                 .getWeather("北京", "json", 1, "f9c6d9d59a3d944651128b61fea0de22")
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<ResponseBody, NetResponse<ResponseBody>>() {

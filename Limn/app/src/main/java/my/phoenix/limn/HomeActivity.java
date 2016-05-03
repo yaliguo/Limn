@@ -1,35 +1,63 @@
 package my.phoenix.limn;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.xml.transform.Transformer;
 
 import base.App;
 import base.BaseActivity;
 import base.BaseBinder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import my.phoenix.limn.adapter.LayerActivity;
 import my.phoenix.limn.adapter.WeatherWeekAdapter;
 import pojo.WeatherInfo;
 import pojo.WeatherItem;
+import rx.SubScribeDot;
+import rx.TransFormers;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
+import utils.BestBlur;
 import utils.DataUtils;
 import utils.SystemUtils;
 import view.BzLine;
+import view.act.BlurActView;
 import vm.HomeModel;
 
 /**
@@ -66,7 +94,11 @@ public class HomeActivity extends BaseActivity {
     TextView mDate;
     @Bind(R.id.at_home_bzlayout)
     LinearLayout mBzLayout;
+    @Bind(R.id.at_home_stub)
+    ViewStub mStub;
     private ViewBind mViewBind;
+    private boolean isBlur = false;
+
     @Override
     public int setContentLayout() {
         return R.layout.activity_home;
@@ -139,10 +171,14 @@ public class HomeActivity extends BaseActivity {
             weatherItem.img=DataUtils.ValueOf(ss);
             list.add(weatherItem);
         }
-        mWerGrid.setAdapter(new WeatherWeekAdapter(this,list,R.layout.item_home_weather));
+        mWerGrid.setAdapter(new WeatherWeekAdapter(this, list, R.layout.item_home_weather));
+
     }
 
-
+@Bind(R.id.ceshi1)
+CoordinatorLayout layout;
+    @Bind(R.id.donghua)
+    ImageView img;
     /**
      * error net
      * @param throwable
@@ -162,14 +198,64 @@ public class HomeActivity extends BaseActivity {
     private void initToolBar() {
         this.setSupportActionBar(mToolbar);
         mToobarLayout.setTitle("天气");
+            SubScribeDot.inflateEvent(mStub)
+        .subscribe(new Action1<BlurActView>() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void call(BlurActView view) {
+                Bitmap bitmap = new BestBlur(HomeActivity.this).blurBitmap(currentScreent(), 16, 0.1f);
+                view.setBackground(new BitmapDrawable(bitmap));
+                view.run();
+            }
+        });
+
+        mToobarLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mStub.getParent() != null) {
+                    mStub.inflate();
+                } else {
+                    mStub.setVisibility(View.VISIBLE);
+                }
+                img.setVisibility(View.INVISIBLE);
+                isBlur =true;
+            }
+        });
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0
+                &&isBlur) {
+            mStub.setVisibility(View.INVISIBLE);
+            isBlur =false;
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public Bitmap currentScreent(){
+        View root = this.getWindow().getDecorView().findViewById(android.R.id.content);
+        root.setDrawingCacheEnabled(true);
+        Bitmap drawingCache = root.getDrawingCache();
+
+        Bitmap  currentBitmap = Bitmap.createBitmap(drawingCache.getWidth(), drawingCache.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(currentBitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+        canvas.drawBitmap(drawingCache, 0, 0, paint);
+        root.destroyDrawingCache();
+        return currentBitmap;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     protected void onResume() {
         super.onResume();

@@ -23,6 +23,7 @@ public class RetroBuild {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+        
     }
     public Retrofit getSim() {
         return sim;

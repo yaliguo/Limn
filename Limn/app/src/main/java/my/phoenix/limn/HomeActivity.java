@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.xml.transform.Transformer;
@@ -45,6 +47,7 @@ import my.phoenix.limn.adapter.LayerActivity;
 import my.phoenix.limn.adapter.WeatherWeekAdapter;
 import pojo.WeatherInfo;
 import pojo.WeatherItem;
+import rx.Observable;
 import rx.SubScribeDot;
 import rx.TransFormers;
 import rx.android.schedulers.AndroidSchedulers;
@@ -98,6 +101,10 @@ public class HomeActivity extends BaseActivity {
     ViewStub mStub;
     private ViewBind mViewBind;
     private boolean isBlur = false;
+    BehaviorSubject<BlurActView> subject  = BehaviorSubject.create();
+
+    private WeatherInfo minfo;
+    private Bitmap currentBitmap;
 
     @Override
     public int setContentLayout() {
@@ -118,34 +125,23 @@ public class HomeActivity extends BaseActivity {
         protected void onBind(@NonNull CompositeSubscription compositeSubscription) {
            compositeSubscription.add(mHomeModel.getWeathers()
                    .observeOn(AndroidSchedulers.mainThread())
-                   .map(weatherInfo -> {
-                       setBzLine(weatherInfo);
-                       return weatherInfo;
+                   .map(new Func1<WeatherInfo, WeatherInfo>() {
+                       @Override
+                       public WeatherInfo call(WeatherInfo weatherInfo) {
+                           return weatherInfo;
+                       }
                    })
-                   .subscribe(responseBody -> {
-                       if (responseBody != null)
-                           HomeActivity.this.setUI(responseBody);
+                   .subscribe(new Action1<WeatherInfo>() {
+                       @Override
+                       public void call(WeatherInfo responseBody) {
+                           if (responseBody != null)
+                               HomeActivity.this.setUI(responseBody);
+                       }
                    }, HomeActivity.this::loadError));
         }
     }
 
-    private void setBzLine(WeatherInfo weatherInfo) {
-        if(DataUtils.CheckNull(weatherInfo))return;
-        BzLine bzLine1 = new BzLine.Builder(this)
-                .configMode(BzLine.BzMode.TEMPERATURE_h)
-                .confinTempperInfo(weatherInfo)
-                .create();
-        BzLine bzLine2 = new BzLine.Builder(this)
-                .configMode(BzLine.BzMode.TEMPERATURE_l)
-                .confinTempperInfo(weatherInfo)
-                .create();
-        mBzLayout.addView(bzLine1);
-        mBzLayout.addView(bzLine2);
-        bzLine1.startAnimator(5000);
-                bzLine2.startAnimator(5000);
-        int screenWidth = SystemUtils.getScreenWidth(this);
-        int screenHeight = SystemUtils.getScreenHeight(this);
-    }
+
 
     /**
      * notify data
@@ -153,12 +149,13 @@ public class HomeActivity extends BaseActivity {
      */
     private void setUI(WeatherInfo weatherInfo) {
         if(DataUtils.CheckNull(weatherInfo))return;
+        minfo = weatherInfo;
         mUpTime.setText("更新时间："+weatherInfo.result.data.realtime.time);
         mDate.setText("今日 :"+weatherInfo.result.data.realtime.date);
         mTemplate.setText("22");
         mTemplateSmall.setText(weatherInfo.result.data.weather.get(0).info.night.get(2) + "℃~" +
                 weatherInfo.result.data.weather.get(0).info.day.get(2) + "℃");
-        mAri.setText(weatherInfo.result.data.pm25.pm.pm25_ + weatherInfo.result.data.pm25.pm.quality);
+       // mAri.setText(weatherInfo.result.data.pm25.pm.pm25_ + weatherInfo.result.data.pm25.pm.quality);
         mWeatherImg.setImageLevel(DataUtils.ValueOf(weatherInfo.result.data.realtime.weather.img));
         mWeatherTx.setText(weatherInfo.result.data.realtime.weather.info);
         mWindTxtx.setText(weatherInfo.result.data.realtime.wind.direct + weatherInfo.result.data.realtime.wind.power);
@@ -175,10 +172,6 @@ public class HomeActivity extends BaseActivity {
 
     }
 
-@Bind(R.id.ceshi1)
-CoordinatorLayout layout;
-    @Bind(R.id.donghua)
-    ImageView img;
     /**
      * error net
      * @param throwable
@@ -199,28 +192,34 @@ CoordinatorLayout layout;
         this.setSupportActionBar(mToolbar);
         mToobarLayout.setTitle("天气");
             SubScribeDot.inflateEvent(mStub)
-        .subscribe(new Action1<BlurActView>() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void call(BlurActView view) {
-                Bitmap bitmap = new BestBlur(HomeActivity.this).blurBitmap(currentScreent(), 16, 0.1f);
-                view.setBackground(new BitmapDrawable(bitmap));
-                view.run();
-            }
-        });
-
+        .subscribe(subject);
+        blurRun();
         mToobarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isBlur){return;}
                 if (mStub.getParent() != null) {
                     mStub.inflate();
                 } else {
                     mStub.setVisibility(View.VISIBLE);
                 }
-                img.setVisibility(View.INVISIBLE);
-                isBlur =true;
+                isBlur = true;
+                blurRun();
             }
         });
+    }
+
+    private void blurRun() {
+        subject.asObservable()
+                .subscribe(new Action1<BlurActView>() {
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public void call(BlurActView blurActView) {
+                        Bitmap bitmap = new BestBlur(HomeActivity.this).blurBitmap(currentScreent(), 16, 0.1f);
+                        blurActView.setBackground(new BitmapDrawable(bitmap));
+                        blurActView.run();
+                    }
+                });
     }
 
     @Override
@@ -236,11 +235,13 @@ CoordinatorLayout layout;
     }
 
     public Bitmap currentScreent(){
+        if(currentBitmap!=null&&!currentBitmap.isRecycled()){
+            return currentBitmap;
+        }
         View root = this.getWindow().getDecorView().findViewById(android.R.id.content);
         root.setDrawingCacheEnabled(true);
         Bitmap drawingCache = root.getDrawingCache();
-
-        Bitmap  currentBitmap = Bitmap.createBitmap(drawingCache.getWidth(), drawingCache.getHeight(), Bitmap.Config.ARGB_8888);
+        currentBitmap = Bitmap.createBitmap(drawingCache.getWidth(), drawingCache.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(currentBitmap);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -260,5 +261,12 @@ CoordinatorLayout layout;
     protected void onResume() {
         super.onResume();
         mViewBind.bind();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewBind.unbind();
+        currentBitmap.recycle();
     }
 }

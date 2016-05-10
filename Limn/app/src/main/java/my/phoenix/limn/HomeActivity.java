@@ -53,9 +53,12 @@ import rx.TransFormers;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
+import store.WeatherStore;
 import utils.BestBlur;
 import utils.DataUtils;
 import utils.SystemUtils;
@@ -67,6 +70,8 @@ import vm.HomeModel;
  * Created by pe on 2015/12/18.
  */
 public class HomeActivity extends BaseActivity {
+    @Inject
+    WeatherStore wStore;
     @Inject
     HomeModel mHomeModel;
     @Bind(R.id.at_home_nsv)
@@ -116,8 +121,8 @@ public class HomeActivity extends BaseActivity {
         App.getInstance().mCompoent.inject(this);
         initToolBar();
         mViewBind= new ViewBind();
-        mHomeModel.subToData();
         mViewBind.bind();
+        mHomeModel.subToData();
     }
 
     private class ViewBind extends BaseBinder{
@@ -210,14 +215,21 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void blurRun() {
-        subject.asObservable()
+       Observable.combineLatest(wStore.query(), subject, new Func2<WeatherInfo, BlurActView, BlurActView>() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public BlurActView call(WeatherInfo info, BlurActView blurActView) {
+                Bitmap bitmap = new BestBlur(HomeActivity.this).blurBitmap(currentScreent(), 16, 0.1f);
+                blurActView.setBackground(new BitmapDrawable(bitmap));
+                blurActView.setBzLine(info);
+                blurActView.run();
+                return blurActView;
+            }
+
+        })
                 .subscribe(new Action1<BlurActView>() {
-                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
                     @Override
                     public void call(BlurActView blurActView) {
-                        Bitmap bitmap = new BestBlur(HomeActivity.this).blurBitmap(currentScreent(), 16, 0.1f);
-                        blurActView.setBackground(new BitmapDrawable(bitmap));
-                        blurActView.run();
                     }
                 });
     }

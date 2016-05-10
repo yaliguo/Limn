@@ -22,6 +22,9 @@ public abstract class BaseBinder {
             compositeSubscription = null;
         }
     }
+    public  CompositeSubscription getComposite(){
+        return compositeSubscription;
+    }
 
     protected abstract void onBind(@Nullable final CompositeSubscription compositeSubscription);
 }

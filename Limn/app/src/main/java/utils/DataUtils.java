@@ -28,7 +28,7 @@ public class DataUtils {
 
     public static String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        Date curDate = new Date(System.currentTimeMillis());//
         String str = formatter.format(curDate);
 
         return str;

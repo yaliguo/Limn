@@ -129,13 +129,16 @@ public class BzLine extends View {
         PathMeasure pathMeasure = new PathMeasure(getPzPath(mInfo), false);
         ValueAnimator va = ValueAnimator.ofFloat(0, pathMeasure.getLength());
         va.setDuration(duration);
-        va.addUpdateListener(animation -> {
-            float animatedValue = (float) va.getAnimatedValue();
-            if(animatedValue==pathMeasure.getLength()){
-                isEnd = true;
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) va.getAnimatedValue();
+                if (animatedValue == pathMeasure.getLength()) {
+                    isEnd = true;
+                }
+                pathMeasure.getPosTan(animatedValue, mCurrentPosition, null);
+                BzLine.this.postInvalidate();
             }
-            pathMeasure.getPosTan(animatedValue, mCurrentPosition, null);
-            postInvalidate();
         });
         va.start();
     }

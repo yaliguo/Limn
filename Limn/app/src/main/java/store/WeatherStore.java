@@ -11,6 +11,7 @@ import base.App;
 import base.BaseStore;
 import pojo.WeatherInfo;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -26,9 +27,18 @@ public class WeatherStore extends BaseStore<WeatherInfo> {
     public Observable<WeatherInfo> query() {
         return Observable.just("")
                 .observeOn(Schedulers.computation())
-                .map(s -> {
-                    Preference<String> json = App.getInstance().getRxPreferences().getString("json", "");
-                    return new Gson().fromJson(json.get(), WeatherInfo.class);
+                .map(new Func1<String, WeatherInfo>() {
+                    @Override
+                    public WeatherInfo call(String s) {
+                        Preference<String> json = App.getInstance().getRxPreferences().getString("json", "");
+                        return new Gson().fromJson(json.get(), WeatherInfo.class);
+                    }
+                }).observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<WeatherInfo, WeatherInfo>() {
+                    @Override
+                    public WeatherInfo call(WeatherInfo info) {
+                            return info;
+                    }
                 });
     }
 }

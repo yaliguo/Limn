@@ -26,349 +26,349 @@ import utils.DataUtils;
  */
 public class DataLayer extends BaseDataLayer {
 
-    public DataLayer(NetManager manager, WeatherStore store) {
-        super(manager,store);
-    }
-
-    @NonNull
-    public Observable<WeatherInfo> getWehther(){
-    mNetManager.getWeather()
-            .filter(new Func1<NetResponse<ResponseBody>, Boolean>() {
-                @Override
-                public Boolean call(NetResponse<ResponseBody> responseBodyNetResponse) {
-
-                    return responseBodyNetResponse.isOnNext();
-                }
-            })
-            .map(new Func1<NetResponse<ResponseBody>, WeatherInfo>() {
-                @Override
-                public WeatherInfo call(NetResponse<ResponseBody> responseBodyNetResponse) {
-                    String s = "";
-                    try {
-                        s = responseBodyNetResponse.getValue().string();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return DataLayer.this.ConvertData(s);
-                }
-            })
-            .filter(new Func1<WeatherInfo, Boolean>() {
-                @Override
-                public Boolean call(WeatherInfo info) {
-                    if(info.result==null&&info.reason!=null){
-                            WeatherInfo weatherInfo = new Gson().fromJson("{\n" +
-                                    "    \"reason\": \"≤È—Ø≥…π¶\",\n" +
-                                    "    \"result\": {\n" +
-                                    "        \"data\": {\n" +
-                                    "            \"realtime\": {\n" +
-                                    "                \"city_code\": \"101210701\",\n" +
-                                    "                \"city_name\": \"Œ¬÷›\",     /*≥« –*/\n" +
-                                    "                \"date\": \"2014-10-15\",  /*»’∆⁄*/\n" +
-                                    "                \"time\": \"09:00:00\",     /*∏¸–¬ ±º‰*/\n" +
-                                    "                \"week\": 3,\n" +
-                                    "                \"moon\": \"æ≈‘¬ÿ•∂˛\",\n" +
-                                    "                \"dataUptime\": 1413337811,\n" +
-                                    "                \"weather\": {    /*µ±«∞ µøˆÃÏ∆¯*/\n" +
-                                    "                    \"temperature\": \"19\",     /*Œ¬∂»*/\n" +
-                                    "                    \"humidity\": \"54\",     /* ™∂»*/\n" +
-                                    "                    \"info\": \"ŒÌ\",\n" +
-                                    "                    \"img\": \"18\" /*18 «ŒÌ’‚÷÷ÃÏ∆¯À˘∂‘”¶µƒÕº∆¨µƒID£¨√ø÷÷ÃÏ∆¯µƒÕº∆¨–Ë“™ƒ˙◊‘º∫…Ëº∆£¨ªÚ’ﬂ«Î‘ƒ∂¡\n" +
-                                    " https://www.juhe.cn/docs/api/id/39/aid/117*/\n" +
-                                    "                },\n" +
-                                    "                \"wind\": {\n" +
-                                    "                    \"direct\": \"±±∑Á\",\n" +
-                                    "                    \"power\": \"1º∂\",\n" +
-                                    "                    \"offset\": null,\n" +
-                                    "                    \"windspeed\": null\n" +
-                                    "                }\n" +
-                                    "            },\n" +
-                                    "            \"life\": {     /*…˙ªÓ÷∏ ˝*/\n" +
-                                    "                \"date\": \"2014-10-15\",\n" +
-                                    "                \"info\": {\n" +
-                                    "                    \"chuanyi\": [     /*¥©“¬÷∏ ˝*/\n" +
-                                    "                        \"Ωœ Ê  \",\n" +
-                                    "                        \"Ω®“È◊≈±°Õ‚Ã◊ªÚ≈£◊–…¿ø„µ»∑˛◊∞°£ƒÍ¿œÃÂ»ı’ﬂ“À◊≈º–øÀ…¿°¢±°√´“¬µ»°£÷Á“πŒ¬≤ÓΩœ¥Û£¨◊¢“‚  µ±‘ˆºı“¬∑˛°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"ganmao\": [    /*∏–√∞÷∏ ˝*/\n" +
-                                    "                        \"Ωœ“◊∑¢\",\n" +
-                                    "                        \"÷Á“πŒ¬≤ÓΩœ¥Û£¨Ωœ“◊∑¢…˙∏–√∞£¨«Î  µ±‘ˆºı“¬∑˛°£ÃÂ÷ Ωœ»ıµƒ≈Û”—«Î◊¢“‚∑¿ª§°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"kongtiao\": [   /*ø’µ˜÷∏ ˝*/\n" +
-                                    "                        \"Ωœ…Ÿø™∆Ù\",\n" +
-                                    "                        \"ƒ˙Ω´∏–µΩ∫‹ Ê  £¨“ª∞„≤ª–Ë“™ø™∆Ùø’µ˜°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"wuran\": [     /*Œ€»æ÷∏ ˝*/\n" +
-                                    "                        \"¡º\",\n" +
-                                    "                        \"∆¯œÛÃıº˛”–¿˚”⁄ø’∆¯Œ€»æŒÔœ° Õ°¢¿©…¢∫Õ«Â≥˝£¨ø…‘⁄ “Õ‚’˝≥£ªÓ∂Ø°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"xiche\": [     /*œ¥≥µ÷∏ ˝*/\n" +
-                                    "                        \"Ωœ  “À\",\n" +
-                                    "                        \"Ωœ  “Àœ¥≥µ£¨Œ¥¿¥“ªÃÏŒﬁ”Í£¨∑Á¡¶Ωœ–°£¨≤¡œ¥“ª–¬µƒ∆˚≥µ÷¡…Ÿƒ‹±£≥÷“ªÃÏ°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"yundong\": [     /*‘À∂Ø÷∏ ˝*/\n" +
-                                    "                        \"Ωœ  “À\",\n" +
-                                    "                        \"ÃÏ∆¯Ωœ∫√£¨µ´∑Á¡¶Ωœ¥Û£¨Õ∆ºˆƒ˙Ω¯–– “ƒ⁄‘À∂Ø£¨»Ù‘⁄ªßÕ‚‘À∂Ø«Î◊¢“‚∑¿∑Á°£\"\n" +
-                                    "                    ],\n" +
-                                    "                    \"ziwaixian\": [   /*◊œÕ‚œﬂ*/\n" +
-                                    "                        \"÷–µ»\",\n" +
-                                    "                        \" Ù÷–µ»«ø∂»◊œÕ‚œﬂ∑¯…‰ÃÏ∆¯£¨Õ‚≥ˆ ±Ω®“ÈÕø≤¡SPF∏ﬂ”⁄15°¢PA+µƒ∑¿…πª§∑Ù∆∑£¨¥˜√±◊”°¢Ã´—Ùæµ°£\"\n" +
-                                    "                    ]\n" +
-                                    "                }\n" +
-                                    "            },\n" +
-                                    "            \"weather\": [   /*Œ¥¿¥º∏ÃÏÃÏ∆¯‘§±®*/\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-15\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"day\": [     /*∞◊ÃÏÃÏ∆¯*/\n" +
-                                    "                            \"0\",     /*ÃÏ∆¯ID*/\n" +
-                                    "                            \"«Á\",     /*ÃÏ∆¯*/\n" +
-                                    "                            \"24\",     /*∏ﬂŒ¬*/\n" +
-                                    "                            \"∂´±±∑Á\",     /*∑ÁœÚ*/\n" +
-                                    "                            \"3-4 º∂\"      /*∑Á¡¶*/\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [    /*“πº‰ÃÏ∆¯*/\n" +
-                                    "                            \"0\",\n" +
-                                    "                            \"«Á\",\n" +
-                                    "                            \"13\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"»˝\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•∂˛\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-16\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"0\",\n" +
-                                    "                            \"«Á\",\n" +
-                                    "                            \"13\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"0\",\n" +
-                                    "                            \"«Á\",\n" +
-                                    "                            \"25\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"15\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"Àƒ\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•»˝\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-17\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"15\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"26\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"16\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"ŒÂ\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•Àƒ\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-18\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"16\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"26\",\n" +
-                                    "                            \"∂´∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"18\",\n" +
-                                    "                            \"∂´∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"¡˘\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•ŒÂ\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-19\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"18\",\n" +
-                                    "                            \"∂´∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"27\",\n" +
-                                    "                            \"∂´∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"19\",\n" +
-                                    "                            \"∂´ƒœ∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"»’\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•¡˘\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-20\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"19\",\n" +
-                                    "                            \"∂´ƒœ∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"27\",\n" +
-                                    "                            \"∂´ƒœ∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"2\",\n" +
-                                    "                            \"“ı\",\n" +
-                                    "                            \"18\",\n" +
-                                    "                            \"ƒœ∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"“ª\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•∆ﬂ\"\n" +
-                                    "                },\n" +
-                                    "                {\n" +
-                                    "                    \"date\": \"2014-10-21\",\n" +
-                                    "                    \"info\": {\n" +
-                                    "                        \"dawn\": [\n" +
-                                    "                            \"2\",\n" +
-                                    "                            \"“ı\",\n" +
-                                    "                            \"18\",\n" +
-                                    "                            \"ƒœ∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"day\": [\n" +
-                                    "                            \"1\",\n" +
-                                    "                            \"∂‡‘∆\",\n" +
-                                    "                            \"26\",\n" +
-                                    "                            \"∂´±±∑Á\",\n" +
-                                    "                            \"3-4 º∂\"\n" +
-                                    "                        ],\n" +
-                                    "                        \"night\": [\n" +
-                                    "                            \"2\",\n" +
-                                    "                            \"“ı\",\n" +
-                                    "                            \"17\",\n" +
-                                    "                            \"\",\n" +
-                                    "                            \"Œ¢∑Á\"\n" +
-                                    "                        ]\n" +
-                                    "                    },\n" +
-                                    "                    \"week\": \"∂˛\",\n" +
-                                    "                    \"nongli\": \"æ≈‘¬ÿ•∞À\"\n" +
-                                    "                }\n" +
-                                    "            ],\n" +
-                                    "            \"pm25\": {    /*PM2.5*/\n" +
-                                    "                \"key\": \"Wenzhou\",\n" +
-                                    "                \"show_desc\": 0,\n" +
-                                    "                \"pm25\": {\n" +
-                                    "                    \"curPm\": \"97\",\n" +
-                                    "                    \"pm25\": \"72\",\n" +
-                                    "                    \"pm10\": \"97\",\n" +
-                                    "                    \"level\": 2,\n" +
-                                    "                    \"quality\": \"¡º\",\n" +
-                                    "                    \"des\": \"ø…“‘Ω” ‹µƒ£¨≥˝º´…Ÿ ˝∂‘ƒ≥÷÷Œ€»æŒÔÃÿ±√Ù∏–µƒ»À“‘Õ‚£¨∂‘π´÷⁄Ω°øµ√ª”–Œ£∫¶°£\"\n" +
-                                    "                },\n" +
-                                    "                \"dateTime\": \"2014ƒÍ10‘¬15»’09 ±\",\n" +
-                                    "                \"cityName\": \"Œ¬÷›\"\n" +
-                                    "            },\n" +
-                                    "            \"date\": null,\n" +
-                                    "            \"isForeign\": 0\n" +
-                                    "        }\n" +
-                                    "    },\n" +
-                                    "    \"error_code\": 0\n" +
-                                    "}", WeatherInfo.class);
-
-                                store.put(weatherInfo);
-                            return false;
-                    }
-                    return true;
-                }
-            })
-            .subscribe(new Action1<WeatherInfo>() {
-                @Override
-                public void call(WeatherInfo item) {
-                    store.put(item);
-                }
-            });
-        return  store.query();
-    }
-
-  public interface GetWeather{
-      @NonNull
-      Observable<WeatherInfo> call();
-  }
-    /**
-     * json 2 Object
-     */
-    private WeatherInfo ConvertData(String responseBody) {
-        WeatherInfo weatherInfo =null;
-        try {
-            weatherInfo = new Gson().fromJson(responseBody, WeatherInfo.class);
-            JSONObject jsonObject = new JSONObject(responseBody);
-            JSONObject result = jsonObject.getJSONObject("result");
-            JSONObject data = result.getJSONObject("data");
-            JSONObject pm25 = data.getJSONObject("pm25");
-            JSONObject pm251 = pm25.getJSONObject("pm25");
-            weatherInfo.result.data.pm25.pm = new PmInfo();
-            weatherInfo.result.data.pm25.pm.pm25_=pm251.getString("pm25");
-            weatherInfo.result.data.pm25.pm.curPm=pm251.getString("curPm");
-            weatherInfo.result.data.pm25.pm.pm10=pm251.getString("pm10");
-            weatherInfo.result.data.pm25.pm.level=pm251.getLong("level");
-            weatherInfo.result.data.pm25.pm.quality=pm251.getString("quality");
-            weatherInfo.result.data.pm25.pm.des=pm251.getString("des");
-        } catch (Exception e) {
-            e.printStackTrace();
+        public DataLayer(NetManager manager, WeatherStore store) {
+                super(manager,store);
         }
-        return weatherInfo;
-    }
+
+        @NonNull
+        public Observable<WeatherInfo> getWehther(){
+                mNetManager.getWeather()
+                        .filter(new Func1<NetResponse<ResponseBody>, Boolean>() {
+                                @Override
+                                public Boolean call(NetResponse<ResponseBody> responseBodyNetResponse) {
+
+                                        return responseBodyNetResponse.isOnNext();
+                                }
+                        })
+                        .map(new Func1<NetResponse<ResponseBody>, WeatherInfo>() {
+                                @Override
+                                public WeatherInfo call(NetResponse<ResponseBody> responseBodyNetResponse) {
+                                        String s = "";
+                                        try {
+                                                s = responseBodyNetResponse.getValue().string();
+                                        } catch (IOException e) {
+                                                e.printStackTrace();
+                                        }
+                                        return DataLayer.this.ConvertData(s);
+                                }
+                        })
+                        .filter(new Func1<WeatherInfo, Boolean>() {
+                                @Override
+                                public Boolean call(WeatherInfo info) {
+                                        if(info.result==null&&info.reason!=null){
+                                                WeatherInfo weatherInfo = new Gson().fromJson("{\n" +
+                                                        "    \"reason\": \"Êü•ËØ¢ÊàêÂäü\",\n" +
+                                                        "    \"result\": {\n" +
+                                                        "        \"data\": {\n" +
+                                                        "            \"realtime\": {\n" +
+                                                        "                \"city_code\": \"101210701\",\n" +
+                                                        "                \"city_name\": \"Ê∏©Â∑û\",     /*ÂüéÂ∏Ç*/\n" +
+                                                        "                \"date\": \"2014-10-15\",  /*Êó•Êúü*/\n" +
+                                                        "                \"time\": \"09:00:00\",     /*Êõ¥Êñ∞Êó∂Èó¥*/\n" +
+                                                        "                \"week\": 3,\n" +
+                                                        "                \"moon\": \"‰πùÊúàÂªø‰∫å\",\n" +
+                                                        "                \"dataUptime\": 1413337811,\n" +
+                                                        "                \"weather\": {    /*ÂΩìÂâçÂÆûÂÜµÂ§©Ê∞î*/\n" +
+                                                        "                    \"temperature\": \"19\",     /*Ê∏©Â∫¶*/\n" +
+                                                        "                    \"humidity\": \"54\",     /*ÊπøÂ∫¶*/\n" +
+                                                        "                    \"info\": \"Èõæ\",\n" +
+                                                        "                    \"img\": \"18\" /*18ÊòØÈõæËøôÁßçÂ§©Ê∞îÊâÄÂØπÂ∫îÁöÑÂõæÁâáÁöÑIDÔºåÊØèÁßçÂ§©Ê∞îÁöÑÂõæÁâáÈúÄË¶ÅÊÇ®Ëá™Â∑±ËÆæËÆ°ÔºåÊàñËÄÖËØ∑ÈòÖËØª\n" +
+                                                        " https://www.juhe.cn/docs/api/id/39/aid/117*/\n" +
+                                                        "                },\n" +
+                                                        "                \"wind\": {\n" +
+                                                        "                    \"direct\": \"ÂåóÈ£é\",\n" +
+                                                        "                    \"power\": \"1Á∫ß\",\n" +
+                                                        "                    \"offset\": null,\n" +
+                                                        "                    \"windspeed\": null\n" +
+                                                        "                }\n" +
+                                                        "            },\n" +
+                                                        "            \"life\": {     /*ÁîüÊ¥ªÊåáÊï∞*/\n" +
+                                                        "                \"date\": \"2014-10-15\",\n" +
+                                                        "                \"info\": {\n" +
+                                                        "                    \"chuanyi\": [     /*Á©øË°£ÊåáÊï∞*/\n" +
+                                                        "                        \"ËæÉËàíÈÄÇ\",\n" +
+                                                        "                        \"Âª∫ËÆÆÁùÄËñÑÂ§ñÂ•óÊàñÁâõ‰ªîË°´Ë£§Á≠âÊúçË£Ö„ÄÇÂπ¥ËÄÅ‰ΩìÂº±ËÄÖÂÆúÁùÄÂ§πÂÖãË°´„ÄÅËñÑÊØõË°£Á≠â„ÄÇÊòºÂ§úÊ∏©Â∑ÆËæÉÂ§ßÔºåÊ≥®ÊÑèÈÄÇÂΩìÂ¢ûÂáèË°£Êúç„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"ganmao\": [    /*ÊÑüÂÜíÊåáÊï∞*/\n" +
+                                                        "                        \"ËæÉÊòìÂèë\",\n" +
+                                                        "                        \"ÊòºÂ§úÊ∏©Â∑ÆËæÉÂ§ßÔºåËæÉÊòìÂèëÁîüÊÑüÂÜíÔºåËØ∑ÈÄÇÂΩìÂ¢ûÂáèË°£Êúç„ÄÇ‰ΩìË¥®ËæÉÂº±ÁöÑÊúãÂèãËØ∑Ê≥®ÊÑèÈò≤Êä§„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"kongtiao\": [   /*Á©∫Ë∞ÉÊåáÊï∞*/\n" +
+                                                        "                        \"ËæÉÂ∞ëÂºÄÂêØ\",\n" +
+                                                        "                        \"ÊÇ®Â∞ÜÊÑüÂà∞ÂæàËàíÈÄÇÔºå‰∏ÄËà¨‰∏çÈúÄË¶ÅÂºÄÂêØÁ©∫Ë∞É„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"wuran\": [     /*Ê±°ÊüìÊåáÊï∞*/\n" +
+                                                        "                        \"ËâØ\",\n" +
+                                                        "                        \"Ê∞îË±°Êù°‰ª∂ÊúâÂà©‰∫éÁ©∫Ê∞îÊ±°ÊüìÁâ©Á®ÄÈáä„ÄÅÊâ©Êï£ÂíåÊ∏ÖÈô§ÔºåÂèØÂú®ÂÆ§Â§ñÊ≠£Â∏∏Ê¥ªÂä®„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"xiche\": [     /*Ê¥óËΩ¶ÊåáÊï∞*/\n" +
+                                                        "                        \"ËæÉÈÄÇÂÆú\",\n" +
+                                                        "                        \"ËæÉÈÄÇÂÆúÊ¥óËΩ¶ÔºåÊú™Êù•‰∏ÄÂ§©Êó†Èõ®ÔºåÈ£éÂäõËæÉÂ∞èÔºåÊì¶Ê¥ó‰∏ÄÊñ∞ÁöÑÊ±ΩËΩ¶Ëá≥Â∞ëËÉΩ‰øùÊåÅ‰∏ÄÂ§©„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"yundong\": [     /*ËøêÂä®ÊåáÊï∞*/\n" +
+                                                        "                        \"ËæÉÈÄÇÂÆú\",\n" +
+                                                        "                        \"Â§©Ê∞îËæÉÂ•ΩÔºå‰ΩÜÈ£éÂäõËæÉÂ§ßÔºåÊé®ËçêÊÇ®ËøõË°åÂÆ§ÂÜÖËøêÂä®ÔºåËã•Âú®Êà∑Â§ñËøêÂä®ËØ∑Ê≥®ÊÑèÈò≤È£é„ÄÇ\"\n" +
+                                                        "                    ],\n" +
+                                                        "                    \"ziwaixian\": [   /*Á¥´Â§ñÁ∫ø*/\n" +
+                                                        "                        \"‰∏≠Á≠â\",\n" +
+                                                        "                        \"Â±û‰∏≠Á≠âÂº∫Â∫¶Á¥´Â§ñÁ∫øËæêÂ∞ÑÂ§©Ê∞îÔºåÂ§ñÂá∫Êó∂Âª∫ËÆÆÊ∂ÇÊì¶SPFÈ´ò‰∫é15„ÄÅPA+ÁöÑÈò≤ÊôíÊä§ËÇ§ÂìÅÔºåÊà¥Â∏ΩÂ≠ê„ÄÅÂ§™Èò≥Èïú„ÄÇ\"\n" +
+                                                        "                    ]\n" +
+                                                        "                }\n" +
+                                                        "            },\n" +
+                                                        "            \"weather\": [   /*Êú™Êù•Âá†Â§©Â§©Ê∞îÈ¢ÑÊä•*/\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-15\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"day\": [     /*ÁôΩÂ§©Â§©Ê∞î*/\n" +
+                                                        "                            \"0\",     /*Â§©Ê∞îID*/\n" +
+                                                        "                            \"Êô¥\",     /*Â§©Ê∞î*/\n" +
+                                                        "                            \"24\",     /*È´òÊ∏©*/\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",     /*È£éÂêë*/\n" +
+                                                        "                            \"3-4 Á∫ß\"      /*È£éÂäõ*/\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [    /*Â§úÈó¥Â§©Ê∞î*/\n" +
+                                                        "                            \"0\",\n" +
+                                                        "                            \"Êô¥\",\n" +
+                                                        "                            \"13\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"‰∏â\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªø‰∫å\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-16\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"0\",\n" +
+                                                        "                            \"Êô¥\",\n" +
+                                                        "                            \"13\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"0\",\n" +
+                                                        "                            \"Êô¥\",\n" +
+                                                        "                            \"25\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"15\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"Âõõ\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªø‰∏â\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-17\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"15\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"26\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"16\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"‰∫î\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªøÂõõ\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-18\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"16\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"26\",\n" +
+                                                        "                            \"‰∏úÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"18\",\n" +
+                                                        "                            \"‰∏úÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"ÂÖ≠\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªø‰∫î\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-19\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"18\",\n" +
+                                                        "                            \"‰∏úÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"27\",\n" +
+                                                        "                            \"‰∏úÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"19\",\n" +
+                                                        "                            \"‰∏úÂçóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"Êó•\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªøÂÖ≠\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-20\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"19\",\n" +
+                                                        "                            \"‰∏úÂçóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"27\",\n" +
+                                                        "                            \"‰∏úÂçóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"2\",\n" +
+                                                        "                            \"Èò¥\",\n" +
+                                                        "                            \"18\",\n" +
+                                                        "                            \"ÂçóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"‰∏Ä\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªø‰∏É\"\n" +
+                                                        "                },\n" +
+                                                        "                {\n" +
+                                                        "                    \"date\": \"2014-10-21\",\n" +
+                                                        "                    \"info\": {\n" +
+                                                        "                        \"dawn\": [\n" +
+                                                        "                            \"2\",\n" +
+                                                        "                            \"Èò¥\",\n" +
+                                                        "                            \"18\",\n" +
+                                                        "                            \"ÂçóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"day\": [\n" +
+                                                        "                            \"1\",\n" +
+                                                        "                            \"Â§ö‰∫ë\",\n" +
+                                                        "                            \"26\",\n" +
+                                                        "                            \"‰∏úÂåóÈ£é\",\n" +
+                                                        "                            \"3-4 Á∫ß\"\n" +
+                                                        "                        ],\n" +
+                                                        "                        \"night\": [\n" +
+                                                        "                            \"2\",\n" +
+                                                        "                            \"Èò¥\",\n" +
+                                                        "                            \"17\",\n" +
+                                                        "                            \"\",\n" +
+                                                        "                            \"ÂæÆÈ£é\"\n" +
+                                                        "                        ]\n" +
+                                                        "                    },\n" +
+                                                        "                    \"week\": \"‰∫å\",\n" +
+                                                        "                    \"nongli\": \"‰πùÊúàÂªøÂÖ´\"\n" +
+                                                        "                }\n" +
+                                                        "            ],\n" +
+                                                        "            \"pm25\": {    /*PM2.5*/\n" +
+                                                        "                \"key\": \"Wenzhou\",\n" +
+                                                        "                \"show_desc\": 0,\n" +
+                                                        "                \"pm25\": {\n" +
+                                                        "                    \"curPm\": \"97\",\n" +
+                                                        "                    \"pm25\": \"72\",\n" +
+                                                        "                    \"pm10\": \"97\",\n" +
+                                                        "                    \"level\": 2,\n" +
+                                                        "                    \"quality\": \"ËâØ\",\n" +
+                                                        "                    \"des\": \"ÂèØ‰ª•Êé•ÂèóÁöÑÔºåÈô§ÊûÅÂ∞ëÊï∞ÂØπÊüêÁßçÊ±°ÊüìÁâ©ÁâπÂà´ÊïèÊÑüÁöÑ‰∫∫‰ª•Â§ñÔºåÂØπÂÖ¨‰ºóÂÅ•Â∫∑Ê≤°ÊúâÂç±ÂÆ≥„ÄÇ\"\n" +
+                                                        "                },\n" +
+                                                        "                \"dateTime\": \"2014Âπ¥10Êúà15Êó•09Êó∂\",\n" +
+                                                        "                \"cityName\": \"Ê∏©Â∑û\"\n" +
+                                                        "            },\n" +
+                                                        "            \"date\": null,\n" +
+                                                        "            \"isForeign\": 0\n" +
+                                                        "        }\n" +
+                                                        "    },\n" +
+                                                        "    \"error_code\": 0\n" +
+                                                        "}", WeatherInfo.class);
+
+                                                store.put(weatherInfo);
+                                                return false;
+                                        }
+                                        return true;
+                                }
+                        })
+                        .subscribe(new Action1<WeatherInfo>() {
+                                @Override
+                                public void call(WeatherInfo item) {
+                                        store.put(item);
+                                }
+                        });
+                return  store.query();
+        }
+
+        public interface GetWeather{
+                @NonNull
+                Observable<WeatherInfo> call();
+        }
+        /**
+         * json 2 Object
+         */
+        private WeatherInfo ConvertData(String responseBody) {
+                WeatherInfo weatherInfo =null;
+                try {
+                        weatherInfo = new Gson().fromJson(responseBody, WeatherInfo.class);
+                        JSONObject jsonObject = new JSONObject(responseBody);
+                        JSONObject result = jsonObject.getJSONObject("result");
+                        JSONObject data = result.getJSONObject("data");
+                        JSONObject pm25 = data.getJSONObject("pm25");
+                        JSONObject pm251 = pm25.getJSONObject("pm25");
+                        weatherInfo.result.data.pm25.pm = new PmInfo();
+                        weatherInfo.result.data.pm25.pm.pm25_=pm251.getString("pm25");
+                        weatherInfo.result.data.pm25.pm.curPm=pm251.getString("curPm");
+                        weatherInfo.result.data.pm25.pm.pm10=pm251.getString("pm10");
+                        weatherInfo.result.data.pm25.pm.level=pm251.getLong("level");
+                        weatherInfo.result.data.pm25.pm.quality=pm251.getString("quality");
+                        weatherInfo.result.data.pm25.pm.des=pm251.getString("des");
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                return weatherInfo;
+        }
 
 }

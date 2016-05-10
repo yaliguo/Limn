@@ -57,6 +57,9 @@ private Context context;
     }
     public void setBzLine(WeatherInfo weatherInfo) {
         if(DataUtils.CheckNull(weatherInfo))return;
+        if(bzLine1!=null&&bzLine2!=null){
+            return;
+        }
         bzLine1 = new BzLine.Builder(context)
                 .configMode(BzLine.BzMode.TEMPERATURE_h)
                 .confinTempperInfo(weatherInfo)

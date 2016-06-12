@@ -1,7 +1,6 @@
 package my.phoenix.limn;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,60 +8,42 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.LruCache;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
-import javax.xml.transform.Transformer;
 
 import base.App;
 import base.BaseActivity;
 import base.BaseBinder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import my.phoenix.limn.adapter.LayerActivity;
 import my.phoenix.limn.adapter.WeatherWeekAdapter;
 import pojo.WeatherInfo;
 import pojo.WeatherItem;
 import rx.Observable;
 import rx.SubScribeDot;
-import rx.TransFormers;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 import store.WeatherStore;
 import utils.BestBlur;
 import utils.DataUtils;
-import utils.SystemUtils;
-import view.BzLine;
 import view.act.BlurActView;
 import vm.HomeModel;
 
@@ -142,7 +123,12 @@ public class HomeActivity extends BaseActivity {
                            if (responseBody != null)
                                HomeActivity.this.setUI(responseBody);
                        }
-                   }, HomeActivity.this::loadError));
+                   }, new Action1<Throwable>() {
+                       @Override
+                       public void call(Throwable throwable) {
+                           HomeActivity.this.loadError(throwable);
+                       }
+                   }));
         }
     }
 

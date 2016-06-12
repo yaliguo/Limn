@@ -1,13 +1,9 @@
 package view.act;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,7 +54,8 @@ private Context context;
     public void setBzLine(WeatherInfo weatherInfo) {
         if(DataUtils.CheckNull(weatherInfo))return;
         if(bzLine1!=null&&bzLine2!=null){
-            return;
+            mContent.removeView(bzLine1);
+            mContent.removeView(bzLine2);
         }
         bzLine1 = new BzLine.Builder(context)
                 .configMode(BzLine.BzMode.TEMPERATURE_h)
@@ -78,12 +75,18 @@ private Context context;
         translate.setInterpolator(new AccelerateDecelerateInterpolator());
         translate.setFillAfter(true);
         mWetherIc.startAnimation(translate);
-        bzLine1.startAnimator(5000);
-        bzLine2.startAnimator(5000);
+        if(bzLine1!=null){
+            bzLine1.startAnimator(5000);
+        }
+        if(bzLine2!=null){
+            bzLine2.startAnimator(5000);
+        }
     }
 
     @Override
     public void onAnimationUpdate(ValueAnimator animation) {
 
     }
+
+
 }

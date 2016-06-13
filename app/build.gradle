@@ -27,10 +27,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'lib/armeabi/libgdx.so'
+        exclude 'lib/armeabi-v7a/libgdx.so'
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
     compile 'com.google.code.gson:gson:2.4'
@@ -52,4 +56,5 @@ dependencies {
     compile 'com.google.dagger:dagger:2.0.2'
     provided 'com.google.dagger:dagger-compiler:2.0.2'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
+    compile files('libs/gdx.jar')
 }

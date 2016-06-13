@@ -96,29 +96,32 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="butterknife-7.0.1" level="project" />
+    <orderEntry type="library" exported="" name="Native_Libs2" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="1_okio-1.6.0" level="project" />
-    <orderEntry type="library" exported="" name="guava-18.0" level="project" />
-    <orderEntry type="library" exported="" name="retrofit-2.0.0-beta4" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.4" level="project" />
-    <orderEntry type="library" exported="" name="adapter-rxjava-2.0.0-beta4" level="project" />
     <orderEntry type="library" exported="" name="lite-orm-1.7.0" level="project" />
-    <orderEntry type="library" exported="" name="dagger-2.0.2" level="project" />
-    <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
-    <orderEntry type="library" exported="" name="rxandroid-1.1.0" level="project" />
-    <orderEntry type="library" exported="" name="design-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="rxjava-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="dagger-producers-2.0-beta" level="project" />
     <orderEntry type="library" exported="" name="converter-gson-2.0.0-beta4" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.1.0" level="project" />
-    <orderEntry type="library" exported="" name="dagger-compiler-2.0.2" level="project" />
-    <orderEntry type="library" exported="" name="logging-interceptor-3.1.2" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="converter-gson-2.0.0-beta2_" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="guava-18.0" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.4" level="project" />
+    <orderEntry type="library" exported="" name="retrofit-2.0.0-beta4" level="project" />
+    <orderEntry type="library" exported="" name="adapter-rxjava-2.0.0-beta4" level="project" />
+    <orderEntry type="library" exported="" name="gdx-backend-android" level="project" />
+    <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
+    <orderEntry type="library" exported="" name="dagger-2.0.2" level="project" />
+    <orderEntry type="library" exported="" name="rxandroid-1.1.0" level="project" />
+    <orderEntry type="library" exported="" name="design-23.1.0" level="project" />
+    <orderEntry type="library" exported="" name="rxjava-1.1.0" level="project" />
+    <orderEntry type="library" exported="" name="dagger-compiler-2.0.2" level="project" />
+    <orderEntry type="library" exported="" name="logging-interceptor-3.1.2" level="project" />
     <orderEntry type="library" exported="" name="rx-preferences-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.1.2" level="project" />
     <orderEntry type="library" exported="" name="rxbinding-0.3.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="gdx" level="project" />
   </component>
 </module>

@@ -41,7 +41,7 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void call(String s) {
                         SplashActivity.this.finish();
-                        Intent intent = new Intent(mBContext,HomeActivity.class);
+                        Intent intent = new Intent(mBContext,SimActivity.class);
                         startActivity(intent);
                     }
                 });

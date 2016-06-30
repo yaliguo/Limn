@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="0" android:drawable="@mipmap/ic_sunny" />
+    <item android:maxLevel="1" android:drawable="@mipmap/ic_overcast" />
+    <item android:maxLevel="2" android:drawable="@mipmap/ic_cloudy" />
+    <item android:maxLevel="3" android:drawable="@mipmap/ic_shower" />
+    <item android:maxLevel="4" android:drawable="@mipmap/ic_thundeshower" />
+    <item android:maxLevel="5" android:drawable="@mipmap/ic_thundeshower" />
+    <item android:maxLevel="6" android:drawable="@mipmap/ic_lightrain" />
+    <item android:maxLevel="7" android:drawable="@mipmap/ic_lightrain" />
+    <item android:maxLevel="8" android:drawable="@mipmap/ic_lightrain" />
+    <item android:maxLevel="9" android:drawable="@mipmap/ic_lightrain" />
+    <item android:maxLevel="10" android:drawable="@mipmap/ic_rainstorm" />
+    <item android:maxLevel="11" android:drawable="@mipmap/ic_rainstorm" />
+    <item android:maxLevel="12" android:drawable="@mipmap/ic_rainstorm" />
+    <item android:maxLevel="13" android:drawable="@mipmap/ic_heavysnow" />
+    <item android:maxLevel="14" android:drawable="@mipmap/ic_heavysnow" />
+    <item android:maxLevel="15" android:drawable="@mipmap/ic_heavysnow" />
+    <item android:maxLevel="16" android:drawable="@mipmap/ic_heavysnow" />
+    <item android:maxLevel="17" android:drawable="@mipmap/ic_heavysnow" />
+    <item android:maxLevel="18" android:drawable="@mipmap/ic_fog" />
+    <item android:maxLevel="19" android:drawable="@mipmap/ic_sleet" />
+    <item android:maxLevel="20" android:drawable="@mipmap/ic_sandstorm" />
+    <item android:maxLevel="21" android:drawable="@mipmap/ic_lightrain" />
+    <item android:maxLevel="22" android:drawable="@mipmap/ic_moderraterain" />
+    <item android:maxLevel="24" android:drawable="@mipmap/ic_moderraterain" />
+    <item android:maxLevel="24" android:drawable="@mipmap/ic_heavyrain" />
+    <item android:maxLevel="25" android:drawable="@mipmap/ic_heavyrain" />
+    <item android:maxLevel="26" android:drawable="@mipmap/ic_snowstorm_blue" />
+    <item android:maxLevel="27" android:drawable="@mipmap/ic_snowstorm_yellow" />
+    <item android:maxLevel="28" android:drawable="@mipmap/ic_snowstorm_red" />
+    <item android:maxLevel="29" android:drawable="@mipmap/ic_dust" />
+    <item android:maxLevel="30" android:drawable="@mipmap/ic_dust" />
+    <item android:maxLevel="31" android:drawable="@mipmap/ic_sunny" />
+    <item android:maxLevel="53" android:drawable="@mipmap/ic_haze" />
+    <item android:maxLevel="100" android:drawable="@mipmap/ic_coollife_nightsunny_big" />
+    <item android:maxLevel="101" android:drawable="@mipmap/ic_coollife_nightcloudy_big" />
+    <item android:maxLevel="103" android:drawable="@mipmap/ic_coollife_nightrain_big" />
+    <item android:maxLevel="113" android:drawable="@mipmap/ic_coollife_nightrain_big" />
+
+</level-list>

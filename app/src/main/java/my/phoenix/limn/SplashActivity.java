@@ -6,11 +6,10 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-
 import java.util.concurrent.TimeUnit;
 
 import base.BaseActivity;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.functions.Action1;
@@ -19,9 +18,9 @@ import rx.functions.Action1;
  * Created by pe on 2015/12/17.
  */
 public class SplashActivity extends BaseActivity {
-    @Bind(R.id.at_splash_sf)
+    @BindView(R.id.at_splash_sf)
     SurfaceView mContentView;
-    @Bind(R.id.at_splash_loadic)
+    @BindView(R.id.at_splash_loadic)
     ImageView mLoadImg;
     public int setContentLayout() {
         return R.layout.activity_splash;
@@ -41,7 +40,7 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void call(String s) {
                         SplashActivity.this.finish();
-                        Intent intent = new Intent(mBContext,SimActivity.class);
+                        Intent intent = new Intent(mBContext,HomeActivity.class);
                         startActivity(intent);
                     }
                 });

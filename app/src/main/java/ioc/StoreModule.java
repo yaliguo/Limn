@@ -2,7 +2,7 @@ package ioc;
 
 import dagger.Module;
 import dagger.Provides;
-import store.WeatherStore;
+import store.StoreFactory;
 
 /**
  * Created by pe on 2016/4/14.
@@ -10,7 +10,7 @@ import store.WeatherStore;
 @Module
 public class StoreModule {
     @Provides
-    public WeatherStore provideWeatherStore(){
-        return  new WeatherStore();
+    public StoreFactory provideStoreFactory(){
+        return  new StoreFactory();
     }
 }

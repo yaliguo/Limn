@@ -11,7 +11,7 @@ import vm.HomeModel;
 @Module
 public class ViewModule {
     @Provides
-    public HomeModel provideHomeViewModule(DataLayer.GetWeather var1){
+    public HomeModel provideHomeViewModule(DataLayer.GetDater var1){
         return  new HomeModel(var1);
     }
 

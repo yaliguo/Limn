@@ -9,7 +9,7 @@ import base.PAdapterSupportType;
 import base.PDefautAdapter;
 import base.PViewHolder;
 import my.phoenix.limn.R;
-import pojo.WeatherInfo;
+import pojo.page.WeatherInfo;
 
 /**
  * Created by pe on 2015/12/18.

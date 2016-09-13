@@ -8,14 +8,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-        android:id="@+id/stub_home_weatherIc"
-        android:src="@mipmap/ic_coollife_sunny_big"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <TextView
         android:layout_gravity="center_horizontal"
         android:text="晴天"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/stub_home_ic"
+        android:src="@mipmap/ic_sunny"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

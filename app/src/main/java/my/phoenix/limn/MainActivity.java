@@ -14,10 +14,10 @@ import java.util.HashMap;
 
 import base.App;
 import base.BaseActivity;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import my.phoenix.limn.adapter.HomeRecAdapter;
-import pojo.WeatherInfo;
+import pojo.page.WeatherInfo;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -30,16 +30,16 @@ import rx.schedulers.Schedulers;
  */
 public class MainActivity extends BaseActivity {
 
-    @Bind(R.id.title)
+    @BindView(R.id.title)
     TextView mTitle;
 
-    @Bind(R.id.rv )
+    @BindView(R.id.rv )
     RecyclerView mRv;
     private WeatherInfo mData;
-    @Bind(R.id.lv )
+    @BindView(R.id.lv )
     ListView mLv;
 
-    @Bind(R.id.img)
+    @BindView(R.id.img)
     ImageView img;
     private Observable<? extends WeatherInfo> weatherNet;
 

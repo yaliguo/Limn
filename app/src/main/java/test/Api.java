@@ -11,6 +11,7 @@ public interface Api {
     interface CatsQueryCallback {
         void onCatListReceived(List<bean> cats);
         void onQueryFailed(Exception e);
+
     }
 
     interface StoreCallback{

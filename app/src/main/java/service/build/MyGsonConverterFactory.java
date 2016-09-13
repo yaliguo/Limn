@@ -18,7 +18,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.Buffer;
-import pojo.WeatherInfo;
+import pojo.page.WeatherInfo;
 import retrofit2.Converter;
 
 /**

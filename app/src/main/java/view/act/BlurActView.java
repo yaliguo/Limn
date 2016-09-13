@@ -3,13 +3,17 @@ package view.act;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import my.phoenix.limn.HomeActivity;
 import my.phoenix.limn.R;
-import pojo.WeatherInfo;
+import pojo.page.WeatherInfo;
 import utils.DataUtils;
 import utils.SystemUtils;
 import view.BzLine;
@@ -19,13 +23,13 @@ import view.BzLine;
  */
 public class BlurActView extends BaseView implements ValueAnimator.AnimatorUpdateListener {
 
-    private ImageView mWetherIc;
 private Context context;
     private int screenWidth;
     private int screenHeight;
     private BzLine bzLine1;
     private BzLine bzLine2;
     private LinearLayout mContent;
+    private ImageView mIc;
 
     public BlurActView(Context context) {
         super(context);
@@ -45,8 +49,8 @@ private Context context;
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mWetherIc = (ImageView) findViewById(R.id.stub_home_weatherIc);
         mContent = (LinearLayout) findViewById(R.id.stub_home_content);
+        mIc = (ImageView) findViewById(R.id.stub_home_ic);
         screenWidth = SystemUtils.getScreenWidth(context);
         screenHeight = SystemUtils.getScreenHeight(context);
 
@@ -69,17 +73,30 @@ private Context context;
         mContent.addView(bzLine2);
 
     }
+    public void setLoc(int [] rgs){
+        setLayout(mIc,rgs[0],rgs[1]- HomeActivity.getStatusBarHeight(context));
+    }
+    /*
+              * 设置控件所在的位置YY，并且不改变宽高，
+              * XY为绝对位置
+              */
+    public static void setLayout(View view, int x, int y) {
+        ViewGroup.MarginLayoutParams margin = new ViewGroup.MarginLayoutParams(view.getLayoutParams());
+        margin.setMargins(x, y, x + margin.width, y + margin.height);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(margin);
+        view.setLayoutParams(layoutParams);
+    }
     public void run(){
-        TranslateAnimation translate = new TranslateAnimation( screenWidth/2, screenWidth/2,0.1f,screenHeight/3);
-        translate.setDuration(1000);
+        mIc.setVisibility(View.VISIBLE);
+        TranslateAnimation translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0f ,Animation.RELATIVE_TO_SELF,Animation.RELATIVE_TO_SELF+300);
+        translate.setDuration(800);
         translate.setInterpolator(new AccelerateDecelerateInterpolator());
         translate.setFillAfter(true);
-        mWetherIc.startAnimation(translate);
         if(bzLine1!=null){
-            bzLine1.startAnimator(5000);
+            bzLine1.startAnimator(800);
         }
         if(bzLine2!=null){
-            bzLine2.startAnimator(5000);
+            bzLine2.startAnimator(800);
         }
     }
 

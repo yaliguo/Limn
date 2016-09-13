@@ -1,16 +1,13 @@
 package service.protocol;
 
-import java.util.Map;
-
+import base.Config;
 import okhttp3.ResponseBody;
-import pojo.WeatherInfo;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import pojo.page.FuliInfo;
+import pojo.page.GankInfo;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -33,4 +30,12 @@ public interface NetApi {
                                         @Query("date")String date,
                                         @Query("appid")String appid,
                                         @Query("key")String key);
+
+    @GET("day/{year}/{month}/{day}") Observable<GankInfo> getGankDaily(
+            @Path("year") int year,
+            @Path("month") int month,
+            @Path("day") int day);
+    @GET("data/福利/"+ Config.MEIZHI_LIMIT+"/{page}")
+    Observable<FuliInfo> getGankMeiZhi(@Path("page") int page);
+
 }

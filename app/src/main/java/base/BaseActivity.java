@@ -20,6 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /*一个retrofit的build*/
     public static NetApi  api = RetroControl.getSimAPi();
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(setContentLayout());
         mBContext = this;
